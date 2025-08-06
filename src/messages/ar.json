@@ -1,0 +1,161 @@
+{
+
+  "MainTitle": {
+
+  },
+
+    "HomePage": {
+      "webHostingPlans": "اختر خطة استضافة الويب الخاصة بك!"
+    },
+
+    "Header": {
+            "logoPart1": "استضافة",
+            "logoPart2": "سحابية",
+            "home": "الرئيسية",
+            "articles": "المقالات",
+            "about": "من نحن",
+            "admin": "لوحة التحكم",
+            "login": "تسجيل الدخول",
+            "register": "إنشاء حساب",
+            "Logout": {
+              "title": "تسجيل الخروج",
+              "message": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+              "confirm": "نعم، تسجيل الخروج",
+              "cancel": "لا، إلغاء",
+              "success": "تم تسجيل الخروج بنجاح",
+              "error": "حدث خطأ أثناء تسجيل الخروج. يرجى المحاولة مرة أخرى."
+            }
+        },
+
+    "Hero": {
+      "herotitle": "استضافة سحابية",
+      "heroDescription": "أفضل حل استضافة سحابية لعملك. سريع وآمن وموثوق. ابدأ اليوم!",
+      "herofeature1": "سريع وآمن",
+      "herofeature2": "ضمان وقت التشغيل 99.9%",
+      "herofeature3": "دعم العملاء على مدار الساعة طوال أيام الأسبوع"
+    },
+
+    "WebHostingPlan": {
+      "planTitle": "مميز",
+      "planPrice": "$4.99/شهر",
+      "planDiscount": "خصم 10%",
+      "planFeatures": {
+        "title": "أفضل الميزات",
+        "feature1": "100 موقع ويب",
+        "feature2": "50 جيجابايت تخزين SSD",
+        "feature3": "نطاق ترددي غير محدود",
+        "feature4": "شهادة SSL مجانية",
+        "feature5": "دعم على مدار الساعة طوال أيام الأسبوع",
+        "feature6": "اسم نطاق مجاني"
+      },
+      "planButton": "ابدأ الآن"
+    },
+
+
+    "Footer": {
+      "footerText": "جميع الحقوق محفوظة © 2023 استضافة سحابية. جميع الحقوق محفوظة.",
+      "footerLink1": "سياسة الخصوصية",
+      "footerLink2": "شروط الخدمة",
+      "footerLink3": "اتصل بنا"
+    },
+
+    "RegisterPage": {
+      "title": "إنشاء حساب جديد",
+      "registerForm": {
+        "userName": {
+          "label": "اسم المستخدم",
+          "placeholder": "أدخل اسم المستخدم الخاص بك"
+        },
+        "email": {
+          "label": "البريد الإلكتروني",
+          "placeholder": "أدخل بريدك الإلكتروني"
+        },
+        "password": {
+          "label": "كلمة المرور",
+          "placeholder": "أدخل كلمة المرور الخاصة بك"
+        },
+        "btn": "سجل الآن"
+      }
+    },
+
+    "LoginPage": {
+      "title": "مرحبًا بعودتك!",
+      "loginForm": {
+        "email": {
+          "label": "البريد الإلكتروني",
+          "placeholder": "أدخل بريدك الإلكتروني"
+        },
+        "password": {
+          "label": "كلمة المرور",
+          "placeholder": "أدخل كلمة المرور الخاصة بك"
+        },
+        "btn": "تسجيل الدخول"
+      }
+    },
+
+    "AdminDashboard": {
+      "title": "لوحة التحكم",
+      "AdminSideBar": {
+        "title": "لوحة التحكم",
+        "articles": "المقالات",
+        "comments": "التعليقات"
+      },
+      "ArticlesForm": {
+        "title": "إضافة مقالة جديدة",
+        "placeholdertitle": "أدخل عنوان المقالة",
+        "placeholderdescription": "أدخل وصف المقالة"
+      },
+      "ArticlesTable": {
+        "thead": {
+          "id": "الرقم",
+          "title": "العنوان",
+          "createdAt": "تاريخ الإنشاء",
+          "actions": "الإجراءات"
+        },
+        "tbody": {
+          "edit": "تعديل",
+          "delete": "حذف",
+          "readMore": "قراءة المزيد"
+        },
+        "pagination": {
+          "prev": "السابق",
+          "next": "التالي"
+        },
+      "singleArticlePage": {
+        "title": "صفحة تعديل المقالة",
+        "btn": "تحديث"
+      }
+      },
+      "btn": "إضافة"
+    },
+
+    "ArticlesPage": {
+      "title": "صفحة المقالات",
+      "searchPlaceholder": "أدخل عنوان المقالة للبحث...",
+      "noResults": "لا توجد مقالات متاحة",
+      "pagination": {
+        "prev": "السابق",
+        "next": "التالي",
+         "show": "عدد المقالات في الصفحة"
+
+      },
+
+      "singleArticlePage": {
+        "title": "صفحة المقالة",
+        "emptyCommentError": "يرجى إدخال تعليق",
+        "commentPlaceholder": "أدخل تعليقك هنا...",
+        "commentBtn": "إرسال",
+        "commentSuccess": "تم إرسال تعليقك بنجاح",
+        "commentError": "حدث خطأ أثناء إرسال تعليقك. يرجى المحاولة مرة أخرى.",
+        "commentTitle": "التعليقات"
+      },
+
+      "btn": "قراءة المزيد"
+    },
+
+    "AboutPage": {
+      "title": "من نحن",
+      "description": "نحن شركة استضافة سحابية تقدم أفضل خدمات الاستضافة لمواقع الويب. نحن هنا لمساعدتك في بناء موقعك الإلكتروني وتحقيق النجاح عبر الإنترنت."
+    }
+    
+  }

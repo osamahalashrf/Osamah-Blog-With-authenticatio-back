@@ -1,0 +1,142 @@
+{
+  "HomePage": {
+    "webHostingPlans": "Choose Your Web Hosting Plan!"
+  },
+  "Header": {
+    "logoPart1": "CLOUD",
+    "logoPart2": "HOSTING",
+    "home": "Home",
+    "articles": "Articles",
+    "about": "About Us",
+    "admin": "Admin Dashboard",
+    "login": "Login",
+    "register": "Register",
+    "Logout": {
+      "title": "Logout",
+      "message": "Are you sure you want to logout?",
+      "confirm": "Yes, Logout",
+      "cancel": "No, Cancel",
+      "success": "Logged out successfully",
+      "error": "Error logging out. Please try again."
+    }
+  },
+  "Hero": {
+    "herotitle": "Cloud Hosting",
+    "heroDescription": "The best cloud hosting solution for your business. Fast, secure, and reliable. Get started today!",
+    "herofeature1": "Fast and Secure",
+    "herofeature2": "99.9% Uptime Guarantee",
+    "herofeature3": "24/7 Customer Support"
+  },
+  "WebHostingPlan": {
+    "planTitle": "Premium",
+    "planPrice": "$4.99/mo",
+    "planDiscount": "10% OFF",
+    "planFeatures": {
+      "title": "Top Features",
+      "feature1": "100 Websites",
+      "feature2": "50 GB SSD Storage",
+      "feature3": "Unmetered Bandwidth",
+      "feature4": "Free SSL Certificate",
+      "feature5": "24/7 Support",
+      "feature6": "Free Domain Name"
+    },
+    "planButton": "Get Started"
+  },
+  "Footer": {
+    "footerText": "All rights reserved © 2023 Cloud Hosting. All rights reserved.",
+    "footerLink1": "Privacy Policy",
+    "footerLink2": "Terms of Service",
+    "footerLink3": "Contact Us"
+  },
+  "RegisterPage": {
+    "title": "Create Your Account",
+    "registerForm": {
+      "userName": {
+        "label": "Username",
+        "placeholder": "Enter your username"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Enter your password"
+      },
+      "btn": "Register Now"
+    }
+  },
+  "LoginPage": {
+    "title": "Login to Your Account",
+    "loginForm": {
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Enter your password"
+      },
+      "btn": "Login"
+    }
+  },
+  "AdminDashboard": {
+    "AdminSideBar": {
+      "title": "Dashboard",
+      "articles": "Articles",
+      "comments": "Comments"
+    },
+    "ArticlesForm": {
+      "title": "Add New Article",
+      "placeholdertitle": "Enter the title of the article",
+      "placeholderdescription": "Enter the discription of the article"
+    },
+    "ArticlesTable": {
+      "thead": {
+        "id": "ID",
+        "title": "Title",
+        "createdAt": "CreatedAt",
+        "actions": "Actions"
+      },
+      "tbody": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "readMore": "Read More"
+      },
+      "pagination": {
+        "prev": "Prev",
+        "next": "Next"
+      },
+      "singleArticlePage": {
+        "title": "Article update Page",
+        "btn": "Update"
+      }
+    },
+    "btn": "Add"
+  },
+  "ArticlesPage": {
+    "title": "Article Page",
+    "noResults": "No articles found",
+    "searchPlaceholder": "Enter Article Title to Search...",
+    "pagination": {
+      "prev": "Previous",
+      "next": "Next",
+      "show": "Articles per page"
+    },
+    "singleArticlePage": {
+      "title": "Single Article Page",
+      "emptyCommentError": "Comment cannot be empty",
+      "commentPlaceholder": "Write your comment here...",
+      "commentBtn": "Comment",
+      "commentSuccess": "Comment posted successfully",
+      "commentError": "Error posting comment",
+      "commentTitle": "Comments"
+    },
+    "btn": "Read More"
+  },
+  "AboutPage": {
+    "title": "About Us",
+    "description": "We are a leading cloud hosting provider, offering fast, secure, and reliable hosting solutions for businesses of all sizes. Our mission is to provide the best hosting experience for our customers."
+  }
+  
+}
