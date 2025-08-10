@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import Pagination from "@/components/articles/Pagination";
 import AdminArticlesTable from "./AdminArticlesTable";
 import { prisma } from "@/Utils/db";
+import { Article } from "@/generated/prisma";
 
 interface AdminArticlesTablePageProps {
   searchParams: { pageNumber: string };
@@ -23,9 +24,9 @@ export default async function AdminArticlesPage({
   const userPayload = verifyTokenForPage(token);
   if (userPayload?.isAdmin === false) redirect(`/${locale}`);
 
-  const articles = await getArticles(pageNumber);
+  const articles: Article[] = await getArticles(pageNumber);
   //const count = await getArticleCount();
-  const count = await prisma.article.count(); // الحصول على عدد المقالات من API
+  const count: number = await prisma.article.count(); // الحصول على عدد المقالات من API
   const pages = Math.ceil(count / ARTICLE_PER_PAGE);
 
   return (
