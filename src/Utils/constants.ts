@@ -1,5 +1,6 @@
 
 
-export const ARTICLE_PER_PAGE = 6; // عدد المقالات في كل صفحة
-//export const DOMAIN = "http://localhost:3000";
-export const DOMAIN = "https://osamah-blog-with-authenticatio.vercel.app"; // API endpoint for articles
+export const ARTICLE_PER_PAGE = 6;
+const DEVELOPMENT_DOMAIN = "http://localhost:3000";
+const PRODUCTION_DOMAIN = "https://osamah-blog-with-authenticatio.vercel.app";
+export const DOMAIN = process.env.NODE_ENV === "production" ? PRODUCTION_DOMAIN : DEVELOPMENT_DOMAIN;
