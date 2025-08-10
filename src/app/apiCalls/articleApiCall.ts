@@ -1,6 +1,7 @@
 import { Article } from "@/generated/prisma";
 import { DOMAIN } from "@/Utils/constants";
 import { SingleArticle } from "@/Utils/types";
+import { notFound } from "next/navigation";
 
 // Get articles based on pageNumber, perPage, and searchText
 export async function getArticles(
@@ -14,7 +15,7 @@ export async function getArticles(
     );
 
     if (!response.ok) {
-        throw new Error("Failed to fetch articles");
+        notFound(); // If the response is not OK, it will throw a 404 error.
     }
     return response.json();
 }
