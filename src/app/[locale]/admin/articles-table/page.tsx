@@ -24,25 +24,42 @@ export default async function AdminArticlesPage({
   const userPayload = verifyTokenForPage(token);
   if (userPayload?.isAdmin === false) redirect(`/${locale}`);
 
-  const articles: Article[] = await getArticles(pageNumber);
+  // إصلاح: التحقق من صحة pageNumber
+  const safePageNumber = pageNumber && !isNaN(parseInt(pageNumber)) 
+    ? pageNumber 
+    : "1";
+
+  const articles: Article[] = await getArticles(safePageNumber);
   //const count = await getArticleCount();
   const count: number = await prisma.article.count(); // الحصول على عدد المقالات من API
   const pages = Math.ceil(count / ARTICLE_PER_PAGE);
 
-  return (
+  // سجل التصحيح
+  console.log("DEBUG - AdminArticlesPage:", {
+    pageNumber,
+    safePageNumber,
+    articlesCount: articles.length
+  });
+
+   return (
     <section className="p-5">
       <h1 className="mb-7 text-2xl font-semibold text-gray-700">Articles</h1>
-      {articles.length === 0 && (
-        <div className="text-center text-gray-500 mt-4">
-          No articles found.
+      
+      {articles.length === 0 ? (
+        <div className="text-center text-red-500 mt-4 p-4 border border-red-300 rounded">
+          <p className="font-bold">لم يتم العثور على مقالات!</p>
+          <p className="text-sm">تحقق من: 1) قاعدة البيانات 2) API 3) قيمة pageNumber</p>
         </div>
+      ) : (
+        <>
+          <AdminArticlesTable articles={articles} locale={locale} />
+          <Pagination
+            pageNumber={parseInt(safePageNumber)}
+            pages={pages}
+            route={`/${locale}/admin/articles-table`}
+          />
+        </>
       )}
-      <AdminArticlesTable articles={articles} locale={locale} />
-      <Pagination
-        pageNumber={parseInt(pageNumber)}
-        pages={pages}
-        route={`/${locale}/admin/articles-table`}
-      />
     </section>
   );
 }

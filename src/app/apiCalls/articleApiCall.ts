@@ -7,16 +7,20 @@ import { notFound } from "next/navigation";
 export async function getArticles(
     pageNumber: string | undefined
 ): Promise<Article[]> {
+    // إصلاح: تأكد من أن pageNumber دائماً قيمة صالحة
+    const page = pageNumber && !isNaN(parseInt(pageNumber)) ? pageNumber : "1";
+    
     const response = await fetch(
-        `${DOMAIN}/api/articles?pageNumber=${pageNumber}`,
+        `${DOMAIN}/api/articles?pageNumber=${page}`,
         {
             cache: "no-store"
         }
     );
 
     if (!response.ok) {
-        notFound(); // If the response is not OK, it will throw a 404 error.
+        notFound(); // إرجاع notFound كما كان
     }
+    
     return response.json();
 }
 

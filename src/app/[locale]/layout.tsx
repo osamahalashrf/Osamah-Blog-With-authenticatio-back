@@ -6,7 +6,8 @@ import Header from '@/components/header/Header';
 import { ToastContainer } from 'react-toastify';
 import Footer from '@/components/Footer';
 import "../globals.css";
-import NotFoundPage from './not-found';
+// import NotFoundPage from './not-found';
+import { notFound } from 'next/navigation';
 
 
 export const metadata: Metadata = {
@@ -25,7 +26,7 @@ export default async function LocaleLayout({
   const {locale} = await params;
   if (!hasLocale(routing.locales, locale)) {
     // If not, show a 404 page
-    return <NotFoundPage />;
+    return notFound();
   }
  
   return (

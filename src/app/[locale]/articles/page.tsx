@@ -40,12 +40,23 @@ interface ArticlePageProps {
 export default async function ArticlesPage({ searchParams }: ArticlePageProps) {
   const t = await getTranslations("ArticlesPage"); // استخدام الترجمة هنا
 
-  const { pageNumber } = searchParams;
+  // إصلاح: التعامل مع searchParams بشكل صحيح
+  const pageNumber = typeof searchParams.pageNumber === 'string' 
+    ? searchParams.pageNumber 
+    : "1"; // استبدل parseInt(pageNumber) بـ pageNumber
   const articles: Article[] = await getArticles(pageNumber);
   //const count: number = await getArticleCount(); استغنينا عن هذا السطر لأننا سنستخدم Prisma لجلب عدد المقالات في السطر الذي بعده مباشرةً.من غير وساطة الإي بي آي
 
   const count: number = await prisma.article.count(); // الحصول على عدد المقالات من API
   const pages = Math.ceil(count / ARTICLE_PER_PAGE);
+
+  // إضافة سجل للتصحيح
+  console.log("DEBUG - ArticlesPage:", {
+    searchParams,
+    pageNumber,
+    articlesCount: articles.length,
+    count
+  });
 
   // const page = searchParams.page || "1";
   // const perPage = searchParams.per_page || "6";
@@ -81,11 +92,18 @@ export default async function ArticlesPage({ searchParams }: ArticlePageProps) {
     <section className="text-xl bg-green-400 text-gray-800 font-bold text-center p-5 rounded">
       {t("title")}
       <SearchArticleInput />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-        {articles.map((item) => (
-          <ArticleItem article={item} key={item.id} />
-        ))}
-      </div>
+      {articles.length === 0 ? (
+        <div className="p-8 text-red-600">
+          <p>لا توجد مقالات متاحة حالياً.</p>
+          <p>تحقق من قاعدة البيانات واتصال API.</p>
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+            {articles.map((item) => (
+              <ArticleItem article={item} key={item.id} />
+            ))}
+          </div>
 
       {/* <SearchArticleInput defaultValue={searchText} /> */}
       {/* {data.length === 0 ? (
@@ -110,6 +128,8 @@ export default async function ArticlesPage({ searchParams }: ArticlePageProps) {
       */}
 
       <Pagination pageNumber={parseInt(pageNumber)} route="/articles" pages={pages} />
+      </>
+      )}
     </section>
   );
 }
