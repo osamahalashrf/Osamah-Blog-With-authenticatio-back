@@ -6,9 +6,7 @@ import { verifyToken } from "@/Utils/verifyToken";
 import { updateUserSchema } from '@/Utils/validationSchemas';
 
 interface Props {
-    params: {
-        id: string
-    }
+    params: Promise<{ id: string }>;
 }
 
 /** هذا التعليق نسميه دوكومينتيشن لهذا الروت
@@ -20,8 +18,9 @@ interface Props {
 
 export async function GET(request: NextRequest, { params }: Props) {
     try {
+        const { id } = await params;
         const user = await prisma.user.findUnique({
-            where: { id: parseInt(params.id) },
+            where: { id: parseInt(id) },
             select: {
                 id: true,
                 username: true,
@@ -60,8 +59,11 @@ export async function GET(request: NextRequest, { params }: Props) {
 
 export async function PUT(request: NextRequest, { params }: Props) {
     try {
+
+        const { id } = await params;
+
         const body = await request.json() as UpdateUserDto;
-        const user = await prisma.user.findUnique({ where: { id: parseInt(params.id) } });
+        const user = await prisma.user.findUnique({ where: { id: parseInt(id) } });
 
         if (!user) {
             return NextResponse.json({ message: 'user not found' }, { status: 404 });
@@ -80,7 +82,7 @@ export async function PUT(request: NextRequest, { params }: Props) {
                 body.password = await bcrypt.hash(body.password, salt); // هنا نقوم بتشفير كلمة المرور الجديدة
             }
             const updatedUser = await prisma.user.update({
-                where: { id: parseInt(params.id) },
+                where: { id: parseInt(id) },
                 data: {
                     username: body.username,
                     email: body.email,
@@ -117,9 +119,12 @@ export async function PUT(request: NextRequest, { params }: Props) {
 
 export async function DELETE(request: NextRequest, { params }: Props) {
     try {
+
+        const { id } = await params;
+
         // ترتيب الخطوات مهم لكي لا يعمل اي كود قبل الاخر لانه ينفذ سطر بعد سطر
         const user = await prisma.user.findUnique({ 
-            where: { id: parseInt(params.id) },
+            where: { id: parseInt(id) },
             include: { comment: true } }); // هنا نحصل على التعليقات التابعه للمستخدم المراد حذفها
         if (!user) {
             return NextResponse.json({ message: 'user not found' }, { status: 404 }); // في حالة المستخدم غير موجود
@@ -136,11 +141,11 @@ export async function DELETE(request: NextRequest, { params }: Props) {
         if (userFromToken !== null && userFromToken.id === user.id) { // في حالة وجود التوكن وهو مطابق للمستخدم المراد حذفه
             
             // هنا نقوم بحذف المستخدم من قاعدة البيانات
-            await prisma.user.delete({ where: { id: parseInt(params.id) } });
+            await prisma.user.delete({ where: { id: parseInt(id) } });
 
             // هنا نقوم بحذف جميع التعليقات التي كتبها هذا المستخدم
             await prisma.comment.deleteMany({
-                where: { userId: parseInt(params.id) } // هنا نقوم بحذف جميع التعليقات التي كتبها هذا المستخدم
+                where: { userId: parseInt(id) } // هنا نقوم بحذف جميع التعليقات التي كتبها هذا المستخدم
             });
             return NextResponse.json(
                 { message: 'user deleted successfully' },
