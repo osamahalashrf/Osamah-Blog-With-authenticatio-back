@@ -12,7 +12,9 @@ import { cookies } from 'next/headers';
 
 export async function GET() {
     try {
-        cookies().delete("jwtToken"); // نقوم بحذف الكوكيز التي تحمل التوكن
+        const cookieStore = await cookies();   // ✅ await
+        cookieStore.delete("jwtToken"); 
+        
         return NextResponse.json(
             { message: 'Logout successfully' },
             { status: 200 }
