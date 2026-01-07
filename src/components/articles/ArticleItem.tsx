@@ -1,13 +1,18 @@
+'use client';
+
 import Link from "next/link";
 import { Article } from "@/generated/prisma";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
+import { useParams } from "next/navigation"; // إضافة هذا السطر
+
 
 interface ArticleItemProps {
   article: Article;
 }
 
 export default function ArticleItem({ article }: ArticleItemProps) {
-  const locale = useLocale();
+  const params = useParams(); // استبدال useLocale() بهذا
+  const locale = params.locale as string; // استخراج locale من المعلمات
 
   const t = useTranslations("ArticlesPage"); // استخدام الترجمة هنا
 

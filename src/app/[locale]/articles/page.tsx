@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 interface ArticlePageProps {
-  searchParams: { pageNumber: string };
+  searchParams: Promise<{ pageNumber: string }>; // إضافة Promise هنا
 }
 
 // type ApiResponse = {
@@ -41,9 +41,12 @@ export default async function ArticlesPage({ searchParams }: ArticlePageProps) {
   const t = await getTranslations("ArticlesPage"); // استخدام الترجمة هنا
 
   // إصلاح: التعامل مع searchParams بشكل صحيح
-  const pageNumber = typeof searchParams.pageNumber === 'string' 
-    ? searchParams.pageNumber 
-    : "1"; // استبدل parseInt(pageNumber) بـ pageNumber
+  const resolvedSearchParams = await searchParams;
+  const pageNumber = typeof resolvedSearchParams.pageNumber === 'string' 
+    ? resolvedSearchParams.pageNumber 
+    : "1";
+
+    
   const articles: Article[] = await getArticles(pageNumber);
   //const count: number = await getArticleCount(); استغنينا عن هذا السطر لأننا سنستخدم Prisma لجلب عدد المقالات في السطر الذي بعده مباشرةً.من غير وساطة الإي بي آي
 

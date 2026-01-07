@@ -1,22 +1,31 @@
-import { useLocale, useTranslations } from "next-intl";
 import AddArticleForm from "./AddArticleForm";
 import { verifyTokenForPage } from "@/Utils/verifyToken";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
-export default function AdminPage() {
-  const locale = useLocale();
+interface AdminPageProps {
+  params: Promise<{ locale: string }>; // إضافة Promise هنا
+}
+
+export default async function AdminPage({ params }: AdminPageProps) {
+  // const locale = useLocale();
+
+
+  // استخراج params باستخدام await
+  const { locale } = await params;
 
    // الحصول على التوكن من الكوكيز
   // إذا لم يكن هناك توكن، يتم تعيينه كقيمة فارغة
-  const token = cookies().get("jwtToken")?.value || "";
+  const cookieStore = await cookies();
+  const token = cookieStore.get("jwtToken")?.value || "";
   if (!token) redirect(`/${locale}`);
 
- // إذا لم يكن المستخدم مسجلاً كمسؤول، إعادة التوجيه إلى الصفحة الرئيسية
   const userPayload = verifyTokenForPage(token);
   if (userPayload?.isAdmin === false) redirect(`/${locale}`);
 
-  const t = useTranslations("AdminDashboard");
+  const t = await getTranslations("AdminDashboard");
+
 
   return (
     <div className="flex items-center justify-center h-screen px-5 lg:px-20">

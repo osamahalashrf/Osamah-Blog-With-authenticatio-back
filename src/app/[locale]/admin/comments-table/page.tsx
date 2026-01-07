@@ -16,7 +16,8 @@ export default async function AdminCommentsTable({
 
    // الحصول على التوكن من الكوكيز
   // إذا لم يكن هناك توكن، يتم تعيينه كقيمة فارغة
-  const token = cookies().get("jwtToken")?.value || "";
+  const cookieStore = await cookies();
+    const token = cookieStore.get("jwtToken")?.value || "";
   if (!token) redirect(`/${locale}`);
 
  // إذا لم يكن المستخدم مسجلاً كمسؤول، إعادة التوجيه إلى الصفحة الرئيسية

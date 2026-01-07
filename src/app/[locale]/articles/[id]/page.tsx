@@ -7,69 +7,86 @@ import { getTranslations } from "next-intl/server";
 import { cookies } from "next/headers";
 
 interface SingleArticlePageProps {
-  params: { id: string };
+  params: Promise<{ locale: string; id: string }>;
 }
 
-export default async function SingleArticlePage({ params}: SingleArticlePageProps) {
-  const t = await getTranslations("ArticlesPage.singleArticlePage");
+export default async function SingleArticlePage({ params }: SingleArticlePageProps) {
+  try {
+    const t = await getTranslations("ArticlesPage.singleArticlePage");
 
-  const token = cookies().get("jwtToken")?.value || "";
-  const payload = verifyTokenForPage(token);
+    // استخراج params باستخدام await
+    const { id, locale } = await params;
 
-  // const response = await fetch(
-  //   `http://127.0.0.1:8000/api/articles/${params.id}`,
-  //   {
-  //     headers: {
-  //       "Accept-Language": locale,
-  //     },
-  //   }
-  // );
-  // const json = await response.json();
-  // const article: Article = json.data;
-  //api from laravel with change the language
+    console.log(`DEBUG SingleArticlePage: Received params - id: ${id}, locale: ${locale}`);
 
-  
+    // تحقق من أن id صالح
+    if (!id || isNaN(parseInt(id))) {
+      console.error(`DEBUG: Invalid article ID: ${id}`);
+      throw new Error("Invalid article ID");
+    }
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get("jwtToken")?.value || "";
+    const payload = verifyTokenForPage(token);
+
+    // const response = await fetch(
+    //   `http://127.0.0.1:8000/api/articles/${params.id}`,
+    //   {
+    //     headers: {
+    //       "Accept-Language": locale,
+    //     },
+    //   }
+    // );
+    // const json = await response.json();
+    // const article: Article = json.data;
+    //api from laravel with change the language
 
 
-  const article: SingleArticle = await getSingleArticle(params.id);
-  
 
-  return (
-    <div className=" text-xl text-gray-800 font-bold text-center p-5 rounded mt-3">
-      <h1 className="text-3xl font-bold text-blue-700 line-clamp-1 mb-5">
-        {t("title")}
-      </h1>
-      <div className="flex flex-col justify-between bg-white shadow-md rounded-lg p-5 m-2">
-        <div>
-          <h2 className="text-3xl font-bold text-pink-600 line-clamp-1">
-            {article.title}
-          </h2>
-          <div className="text-gray-400">
-            {new Date(article.createdAt).toDateString()}
+
+    const article: SingleArticle = await getSingleArticle(id);
+
+
+    return (
+      <div className=" text-xl text-gray-800 font-bold text-center p-5 rounded mt-3">
+        <h1 className="text-3xl font-bold text-blue-700 line-clamp-1 mb-5">
+          {t("title")}
+        </h1>
+        <div className="flex flex-col justify-between bg-white shadow-md rounded-lg p-5 m-2">
+          <div>
+            <h2 className="text-3xl font-bold text-pink-600 line-clamp-1">
+              {article.title}
+            </h2>
+            <div className="text-gray-400">
+              {new Date(article.createdAt).toDateString()}
+            </div>
+            <p>{article.description}</p>
           </div>
-          <p>{article.description}</p>
         </div>
+        <div className={`mt-7`}>
+          {payload ? (
+            <AddCommentForm articleId={article.id} />
+          ) : (
+            <p className={`text-blue-600 md:text-xl`}>
+              to write a comment you should log in first!
+            </p>
+          )}
+        </div>
+        <h4 className="text-xl text-gray-800 ps-1 font-semibold mb-2 mt-7">
+          {t("commentTitle")}
+        </h4>
+        {
+          article.comments.map(comment => (
+            <CommentItem key={comment.id} comment={comment} userId={payload?.id} />
+          ))
+        }
+
       </div>
-      <div className={`mt-7`}>
-        {payload ? (
-                <AddCommentForm articleId={article.id} />
-        ) : (
-          <p className={`text-blue-600 md:text-xl`}>
-            to write a comment you should log in first!
-          </p>
-        )}
-      </div>
-      <h4 className="text-xl text-gray-800 ps-1 font-semibold mb-2 mt-7">
-        {t("commentTitle")}
-      </h4>
-      {
-        article.comments.map(comment => (
-          <CommentItem key={comment.id} comment={comment} userId={payload?.id} />
-        ))
-      }
-      
-    </div>
-  );
+    );
+  } catch (error) {
+    console.error("Error in SingleArticlePage:", error);
+    throw error;
+  }
 }
 
 // السبب الذي يجعلنا نعرف هذا الفانكشن هنا لأننا سنستخدم الهوك يوز ترانزليشنز (useTranslations) في هذا الفانكشن، والذي لا يمكن تعريفه داخل الفنكشن الئيسيه للكمبوننت لانه إيسينك فنكشن وهي لا تقبل  الهوك.

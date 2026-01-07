@@ -9,20 +9,28 @@ import { prisma } from "@/Utils/db";
 import { Article } from "@/generated/prisma";
 
 interface AdminArticlesTablePageProps {
-  searchParams: { pageNumber: string };
-  params: { locale: string };
-  
+  searchParams: Promise<{ pageNumber: string }>; // إضافة Promise
+  params: Promise<{ locale: string }>; // إضافة Promise
 }
 
 export default async function AdminArticlesPage({
-  searchParams: { pageNumber },
-  params: { locale },
+  searchParams,
+  params,
 }: AdminArticlesTablePageProps) {
-  const token = cookies().get("jwtToken")?.value || "";
+
+
+  // استخراج params و searchParams باستخدام await
+  const { pageNumber } = await searchParams;
+  const { locale } = await params;
+
+  const cookieStore = await cookies();
+  const token = cookieStore.get("jwtToken")?.value || "";
   if (!token) redirect(`/${locale}`);
 
   const userPayload = verifyTokenForPage(token);
   if (userPayload?.isAdmin === false) redirect(`/${locale}`);
+
+
 
   // إصلاح: التحقق من صحة pageNumber
   const safePageNumber = pageNumber && !isNaN(parseInt(pageNumber)) 
@@ -52,7 +60,7 @@ export default async function AdminArticlesPage({
         </div>
       ) : (
         <>
-          <AdminArticlesTable articles={articles} locale={locale} />
+          <AdminArticlesTable articles={articles} />
           <Pagination
             pageNumber={parseInt(safePageNumber)}
             pages={pages}

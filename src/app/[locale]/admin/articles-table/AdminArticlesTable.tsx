@@ -3,13 +3,22 @@ import { Article } from "@/generated/prisma";
 import Link from "next/link";
 import DeleteArticleButton from "./DeleteArticleButton";
 import { useTranslations } from "next-intl";
+import { useParams } from "next/navigation"; // إضافة هذا السطر
+
 
 interface AdminArticlesTableProps {
   articles: Article[];
-  locale: string;
 }
 
-export default function AdminArticlesTable({ articles, locale }: AdminArticlesTableProps) {
+interface AdminArticlesTableProps {
+  articles: Article[];
+  // locale: string; // إزالة هذا - سنحصل عليه من useParams
+}
+
+export default function AdminArticlesTable({ articles }: AdminArticlesTableProps) {
+
+  const params = useParams(); // استبدال useLocale() بهذا
+  const locale = params.locale as string; // استخراج locale من المعلمات
     const t = useTranslations("AdminDashboard.ArticlesTable");
   return (
     <table className={`table w-full ltr:text-left rtl:text-right`}>

@@ -4,7 +4,7 @@ import { prisma } from "@/Utils/db";
 import { verifyToken } from "@/Utils/verifyToken";
 
 interface Props {
-    params: { id: string }
+    params: Promise<{ id: string }>; // إضافة Promise هنا
 }
 
 /** هذا التعليق نسميه دوكومينتيشن لهذا الروت
@@ -17,10 +17,23 @@ interface Props {
 
 export async function GET(request: NextRequest, { params }: Props) {
     try {
+
+        // استخراج params باستخدام await
+        const { id } = await params;
+
+        console.log(`DEBUG API: Fetching article ID: ${id}`);
+
+        // تحقق من أن ID صالح
+        const articleId = parseInt(id);
+        if (isNaN(articleId)) {
+            console.error(`DEBUG API: Invalid article ID: ${id}`);
+            return NextResponse.json({
+                message: 'Invalid article ID! ID must be a number.'
+            }, { status: 400 });
+        }
+
         const article = await prisma.article.findUnique({
-            where: {
-                id: parseInt(params.id)
-            },
+            where: { id: articleId },
             include: {
                 comments: {
                     include: {
@@ -39,7 +52,8 @@ export async function GET(request: NextRequest, { params }: Props) {
 
         return NextResponse.json(article, { status: 200 });
 
-    } catch {
+    } catch(error) {
+        console.error("API Error:", error);
         return NextResponse.json(
             { message: "Internal Server Error!" },
             { status: 500 }
@@ -57,12 +71,14 @@ export async function GET(request: NextRequest, { params }: Props) {
 export async function PUT(request: NextRequest, { params }: Props) {
     try {
 
+        const { id } = await params;
+
         const user = verifyToken(request);
         if (user === null || user.isAdmin === false) {
             return NextResponse.json({ message: 'only admin can update articles, access denied' }, { status: 401 }); // unauthorized
         }
 
-        const article = await prisma.article.findUnique({ where: { id: parseInt(params.id) } });
+        const article = await prisma.article.findUnique({ where: { id: parseInt(id) } });
 
         if (!article) {
             return NextResponse.json({ message: 'article not found!' }, { status: 404 });
@@ -70,7 +86,7 @@ export async function PUT(request: NextRequest, { params }: Props) {
 
         const body: UpdateArticleDto = await request.json();
         const updatedArticle = await prisma.article.update({
-            where: { id: parseInt(params.id) },
+            where: { id: parseInt(id) },
             data: {
                 title: body.title,
                 description: body.description
@@ -96,13 +112,16 @@ export async function PUT(request: NextRequest, { params }: Props) {
 export async function DELETE(request: NextRequest, { params }: Props) {
 
     try {
+
+        const { id } = await params;
+
         const user = verifyToken(request);
         if (user === null || user.isAdmin === false) {
             return NextResponse.json({ message: 'only admin can delete articles, access denied' }, { status: 401 }); // unauthorized
         }
 
         const article = await prisma.article.findUnique({
-            where: { id: parseInt(params.id) },
+            where: { id: parseInt(id) },
             include: {
                 comments: true // include comments to delete them later
             }
@@ -112,10 +131,10 @@ export async function DELETE(request: NextRequest, { params }: Props) {
         }
 
         // delete article
-        await prisma.article.delete({ where: { id: parseInt(params.id) } });
+        await prisma.article.delete({ where: { id: parseInt(id) } });
 
         // delete all comments related to this article
-        await prisma.comment.deleteMany({ where: { articleId: parseInt(params.id) } });
+        await prisma.comment.deleteMany({ where: { articleId: parseInt(id) } });
 
         return NextResponse.json({ message: "article deleted" }, { status: 200 });
 

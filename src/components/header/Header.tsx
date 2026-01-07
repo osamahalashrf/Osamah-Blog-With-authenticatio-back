@@ -1,15 +1,22 @@
+
+
 import { Link } from "@/i18n/navigation";
 import Navbar from "./Navbar";
-import { useTranslations } from "next-intl";
+// import { useTranslations } from "next-intl";
 import LanguageSwitcher from "../LanguageSwitcher";
 import { cookies } from "next/headers";
 import { verifyTokenForPage } from "@/Utils/verifyToken";
 import LogoutButton from "./LogoutButton";
+import { getTranslations } from "next-intl/server";
 
-export default function Header() {
-  const t = useTranslations("Header");
+export default async function Header() {
+  const t = await getTranslations("Header");
 
-  const token = cookies().get("jwtToken")?.value || ""; // الحصول على التوكن من الكوكيز
+  
+
+const cookieStore = await cookies();
+const token = cookieStore.get("jwtToken")?.value || "";
+ // الحصول على التوكن من الكوكيز
   // إذا لم يكن هناك توكن، يتم تعيينه كقيمة فارغة
   const userPayload = verifyTokenForPage(token);
 

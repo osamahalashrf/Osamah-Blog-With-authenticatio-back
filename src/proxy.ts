@@ -8,7 +8,7 @@ const intlMiddleware = createMiddleware({
   localeDetection: false
 });
 
-export default function middleware(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get('jwtToken')?.value;
 
@@ -19,12 +19,10 @@ export default function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-//   هذا تعبير منتظم (RegEx) يتحقق: هل الصفحة هي /en/profile أو /ar/profile أو شيء تحتها مثل /ar/profile/settings؟
-// إذا كان نعم، نُخزّن النتيجة في متغير isProfilePage.
+  // هل الصفحة هي /en/profile أو /ar/profile أو أي مسار فرعي تحتها؟
   const isProfilePage = /^\/(en|ar)\/profile(\/.*)?$/.test(pathname);
 
-//   نحدد الصفحات التي لا يجب أن يدخلها المستخدم إذا كان مسجّل دخول.
-// .includes(pathname) تعني: هل المسار الحالي موجود ضمن هذه القائمة؟ تعطي true أو false.
+  // صفحات تسجيل الدخول والتسجيل
   const isLoginOrRegisterPage = [
     '/en/login',
     '/ar/login',
@@ -35,7 +33,7 @@ export default function middleware(request: NextRequest) {
   // حماية صفحة profile للمستخدمين غير المسجلين
   if (isProfilePage && !token) {
     return NextResponse.json(
-      { message: 'No token provided, access denied, message from middleware' },
+      { message: 'No token provided, access denied, message from proxy' },
       { status: 401 }
     );
   }
@@ -48,6 +46,7 @@ export default function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // تمرير الطلب إلى next-intl middleware
   return intlMiddleware(request);
 }
 

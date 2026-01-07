@@ -2,7 +2,7 @@
 import { CgMenuGridR } from "react-icons/cg";
 import { FaRegComment } from "react-icons/fa";
 import { MdOutlineArticle } from "react-icons/md";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
 
@@ -12,7 +12,7 @@ export default function AdminSideBar() {
 
   // استخدام مكتبة next-intl للحصول على اللغة النشطة
   // من خلال استخدام hook useLocale
-  const locale = useLocale();
+  // const locale = useLocale();
   // const getLocalizedPath = (path: string) => {
   //   // تضمين اللغة النشطة في المسار
   //   return `/${locale}${path}`;
