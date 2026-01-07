@@ -5,7 +5,7 @@ import { UpdateCommentDto } from "@/Utils/dtos";
 
 
 interface Props {
-    params: { id: string };
+     params: Promise<{ id: string }>
 }
 
 
@@ -19,8 +19,10 @@ interface Props {
 export async function PUT(req: NextRequest, { params }: Props) {
     try {
 
+        const { id } = await params;
+
         const comment = await prisma.comment.findUnique({ // هنا نحصل على التعليق المراد تحديثه
-            where: { id: parseInt(params.id) }, // هنا نبحث عن التعليق باستخدام ال ID الخاص به
+            where: { id: parseInt(id) }, // هنا نبحث عن التعليق باستخدام ال ID الخاص به
             include: { user: true } // هنا نضمن أن نحصل على معلومات المستخدم الذي كتب التعليق اي نجلب بياناته
         });
 
@@ -36,7 +38,7 @@ export async function PUT(req: NextRequest, { params }: Props) {
         const body = await req.json() as UpdateCommentDto; // هنا نحصل على البيانات الجديدة من الطلب
 
         const updatedComment = await prisma.comment.update({
-            where: { id: parseInt(params.id) }, // هنا نحدد التعليق الذي نريد تحديثه
+            where: { id: parseInt(id) }, // هنا نحدد التعليق الذي نريد تحديثه
             data: {
                 text: body.text, // هنا نحدد التعليق الذي نريد تحديثه
             },
@@ -58,8 +60,10 @@ export async function PUT(req: NextRequest, { params }: Props) {
 
 export async function DELETE(req: NextRequest, { params }: Props) {
     try {
+
+        const { id } = await params;
         const comment = await prisma.comment.findUnique({
-            where: { id: parseInt(params.id) },
+            where: { id: parseInt(id) },
             include: { user: true }
         });
 
@@ -72,7 +76,7 @@ export async function DELETE(req: NextRequest, { params }: Props) {
             return NextResponse.json({ message: 'you are not allowed to delete this comment, access denied' }, { status: 403 });
         }
 
-        await prisma.comment.delete({ where: { id: parseInt(params.id) } });
+        await prisma.comment.delete({ where: { id: parseInt(id) } });
 
         return NextResponse.json({ message: 'comment deleted successfully' }, { status: 200 });
     } catch (error) {
